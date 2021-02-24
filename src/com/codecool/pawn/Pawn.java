@@ -12,13 +12,45 @@ public class Pawn {
         this.isWhite = isWhite;
     }
 
-    public static void validateMove(char[][] gameBoard, int targetX, int targetY){
-
+    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction){
+        return isFieldOccupied(gameBoard, targetX, targetY) ?
+                isFieldOccupiedByEnemy(gameBoard, targetX, targetY) && isShootPossible(gameBoard, targetX, targetY, direction) :
+                isMoveInBounds(gameBoard, targetX, targetY);
     }
 
-    private boolean isMoveInBounds(char[][] gameBoard, int targetX, int targetY){
+    private boolean isMoveInBounds(Pawn[][] gameBoard, int targetX, int targetY){
         return gameBoard.length > targetY && gameBoard[targetY].length > targetX;
     }
+
+    private boolean isFieldOccupied(Pawn[][] gameBoard, int targetX, int targetY){
+        return gameBoard[targetY][targetX] != null;
+    }
+
+    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY){
+        return gameBoard[targetY][targetX].getIsWhite();
+    }
+
+    private boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction){
+
+        int[] afterShootCoordsChange;
+        byte y = 0;
+        byte x = 1;
+
+        switch (direction) {
+            case "NE" -> afterShootCoordsChange = new int[]{1, 1};
+            case "NW" -> afterShootCoordsChange = new int[]{1, -1};
+            case "SE" -> afterShootCoordsChange = new int[]{-1, 1};
+            case "SW" -> afterShootCoordsChange = new int[]{-1, -1};
+            default -> throw new IllegalStateException("Unexpected value: " + direction);
+        }
+
+        boolean enemyOnTargetField = isFieldOccupiedByEnemy(gameBoard, targetX, targetY);
+        boolean emptyFieldAfterShoot = !isFieldOccupied(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
+        boolean fieldAfterShootInBounds = isMoveInBounds(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
+
+        return enemyOnTargetField && emptyFieldAfterShoot && fieldAfterShootInBounds;
+    }
+
 
     public void setPositionX(int positionX){
         this.positionX = positionX;
@@ -38,6 +70,5 @@ public class Pawn {
     public int getPositionY(){
         return positionY;
     }
-
 
 }
