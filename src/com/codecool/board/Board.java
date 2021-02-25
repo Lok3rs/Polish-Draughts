@@ -16,7 +16,7 @@ public class Board {
         return fillBoard(gameBoard);
     }
 
-    public Pawn[][] fillBoard(Pawn[][] gameBoard) {
+    private Pawn[][] fillBoard(Pawn[][] gameBoard) {
         int lastIndex = gameBoard.length - 1;
         int beforeLastIndex = gameBoard.length - 2;
 
