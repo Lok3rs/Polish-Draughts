@@ -9,9 +9,8 @@ import java.util.Arrays;
 public class Main {
 
     public static void main(String[] args) {
-        Board board = new Board(7);
-        Pawn[][] gameBoard = board.initBoard();
-        Game.printBoard(gameBoard);
+        Game newGame = new Game();
+        newGame.startGame();
 
     }
 }
