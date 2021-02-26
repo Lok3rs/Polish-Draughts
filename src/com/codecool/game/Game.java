@@ -4,7 +4,6 @@ import com.codecool.board.Board;
 import com.codecool.pawn.Pawn;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -12,7 +11,7 @@ import java.util.stream.IntStream;
 
 public class Game {
 
-    Scanner sc = new Scanner(System.in);
+    final Scanner sc = new Scanner(System.in);
     final static char[]  alphabet = "ABCDEFGHIJKLMNOPRSTWYZ".toCharArray();
 
     public static void printBoard(Pawn[][] gameBoard){
@@ -56,7 +55,6 @@ public class Game {
         Pawn[][] gameBoard = Board.initBoard(size);
         printBoard(gameBoard);
         Pawn pawn = choosePawnForMove(gameBoard, true);
-        System.out.println(pawn.getIsWhite());
     }
 
     private int askForBoardSize(){
@@ -81,7 +79,7 @@ public class Game {
         int rowIndex = getRowIndex(gameBoard);
         int columnIndex = getColumnIndex(gameBoard);
 
-
+        System.out.println(validatePawnSelection(gameBoard, rowIndex, columnIndex, whitesTurn));
 
         return gameBoard[rowIndex][columnIndex];
     }
@@ -116,6 +114,12 @@ public class Game {
             );
         }
         return columnIdentifier - 1;
+    }
+
+
+    private boolean validatePawnSelection(Pawn[][] gameBoard, int rowIndex, int columnIndex, boolean playerIsWhite){
+        Pawn selectedField = gameBoard[rowIndex][columnIndex];
+        return selectedField != null && selectedField.getIsWhite() == playerIsWhite;
     }
 
 
