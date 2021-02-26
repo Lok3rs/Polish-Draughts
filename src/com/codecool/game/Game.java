@@ -54,7 +54,7 @@ public class Game {
         int size = askForBoardSize();
         Pawn[][] gameBoard = Board.initBoard(size);
         printBoard(gameBoard);
-        Pawn pawn = choosePawnForMove(gameBoard, true);
+        getMoveDirection(gameBoard);
     }
 
     private int askForBoardSize(){
@@ -116,12 +116,25 @@ public class Game {
         return columnIdentifier - 1;
     }
 
-
     private boolean validatePawnSelection(Pawn[][] gameBoard, int rowIndex, int columnIndex, boolean playerIsWhite){
         Pawn selectedField = gameBoard[rowIndex][columnIndex];
         return selectedField != null && selectedField.getIsWhite() == playerIsWhite;
     }
 
 
-
+    private int[] getMoveDirection(Pawn[][] gameBoard){
+        int[] coordsChange = new int[2];
+        System.out.println("Choose move direction:\n1 - NE\n2 - NW\n3 - SE\n4 - SW");
+        while (coordsChange[0] == 0){
+            String userChoose = sc.next();
+            switch (userChoose){
+                case "1" ->  coordsChange = new int[]{1, 1};
+                case "2" ->  coordsChange = new int[]{1, -1};
+                case "3" ->  coordsChange = new int[]{-1, 1};
+                case "4" ->  coordsChange = new int[]{-1, -1};
+                default -> System.out.print("Invalid choice, try again: ");
+            }
+        }
+        return coordsChange;
+    }
 }
