@@ -51,10 +51,18 @@ public class Game {
     }
 
     public void startGame(){
+        int x = 1;
+        int y = 0;
         int size = askForBoardSize();
         Pawn[][] gameBoard = Board.initBoard(size);
         printBoard(gameBoard);
-        getMoveDirection(gameBoard);
+        Pawn selectedPawn = choosePawnForMove(gameBoard, true);
+        String moveDirection = getMoveDirection();
+        int[] moveTargetCoordinates = getMoveCoordinates(moveDirection);
+        System.out.println(selectedPawn.validateMove(gameBoard,
+                selectedPawn.getPositionX() + moveTargetCoordinates[x],
+                selectedPawn.getPositionY() + moveTargetCoordinates[y],
+                moveDirection));
     }
 
     private int askForBoardSize(){
@@ -122,19 +130,31 @@ public class Game {
     }
 
 
-    private int[] getMoveDirection(Pawn[][] gameBoard){
-        int[] coordsChange = new int[2];
+    private String getMoveDirection(){
         System.out.println("Choose move direction:\n1 - NE\n2 - NW\n3 - SE\n4 - SW");
-        while (coordsChange[0] == 0){
+        String moveDirection = "";
+        while (moveDirection.equals("")){
             String userChoose = sc.next();
             switch (userChoose){
-                case "1" ->  coordsChange = new int[]{1, 1};
-                case "2" ->  coordsChange = new int[]{1, -1};
-                case "3" ->  coordsChange = new int[]{-1, 1};
-                case "4" ->  coordsChange = new int[]{-1, -1};
+                case "1" ->  moveDirection = "NE";
+                case "2" ->  moveDirection = "NW";
+                case "3" ->  moveDirection = "SE";
+                case "4" ->  moveDirection = "SW";
                 default -> System.out.print("Invalid choice, try again: ");
             }
         }
+        return moveDirection;
+    }
+
+    private int[] getMoveCoordinates(String direction){
+        int[] coordsChange = new int[0];
+        switch (direction){
+            case "NE" ->  coordsChange = new int[]{1, 1};
+            case "NW" ->  coordsChange = new int[]{1, -1};
+            case "SE" ->  coordsChange = new int[]{-1, 1};
+            case "SW" ->  coordsChange = new int[]{-1, -1};
+        }
+
         return coordsChange;
     }
 }
