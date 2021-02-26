@@ -11,12 +11,8 @@ public class Board {
         this.size = size;
     }
 
-    public Pawn[][] initBoard(){
+    public static Pawn[][] initBoard(int size){
         Pawn[][] gameBoard = new Pawn[size][size];
-        return fillBoard(gameBoard);
-    }
-
-    private Pawn[][] fillBoard(Pawn[][] gameBoard) {
         int lastIndex = gameBoard.length - 1;
         int beforeLastIndex = gameBoard.length - 2;
 
@@ -26,8 +22,8 @@ public class Board {
                 else if (i == 1) { gameBoard[i][j] = j % 2 == 1 ? new Pawn(i, j, false) : null; }
                 else if (i == lastIndex) { gameBoard[i][j] = j % 2 == 0 ? new Pawn(i, j, true) : null; }
                 else if (i == beforeLastIndex ) { gameBoard[i][j] = j % 2 == 1 ? new Pawn(i, j, true) : null; }
-                }
             }
+        }
         return gameBoard;
     }
 }
