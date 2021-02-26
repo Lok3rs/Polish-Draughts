@@ -4,6 +4,7 @@ import com.codecool.board.Board;
 import com.codecool.pawn.Pawn;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -12,10 +13,10 @@ import java.util.stream.IntStream;
 public class Game {
 
     Scanner sc = new Scanner(System.in);
+    final static char[]  alphabet = "ABCDEFGHIJKLMNOPRSTWYZ".toCharArray();
 
     public static void printBoard(Pawn[][] gameBoard){
 
-        char[] alphabet = "ABCDEFGHIJKLMNOPRSTWYZ".toCharArray();
         String dashes = new String(new char[gameBoard.length * 4]).replace("\0", "-");
         List<Integer> columnNumbers = IntStream.rangeClosed(1, gameBoard.length)
                 .boxed().collect(Collectors.toList());
@@ -54,6 +55,8 @@ public class Game {
         int size = askForBoardSize();
         Pawn[][] gameBoard = Board.initBoard(size);
         printBoard(gameBoard);
+        Pawn pawn = choosePawnForMove(gameBoard, true);
+        System.out.println(pawn.getIsWhite());
     }
 
     private int askForBoardSize(){
@@ -64,8 +67,7 @@ public class Game {
             try{
                 boardSize = Integer.parseInt(userInput);
             } catch (NumberFormatException e){
-                System.out.print("Size needs to be an integer 8 - 20, try again: "
-                );
+                System.out.print("Size needs to be an integer 8 - 20, try again: ");
             }
             System.out.print(
                     (boardSize < 8 || boardSize > 20) ? "Invalid number, try again: " : ""
@@ -73,6 +75,47 @@ public class Game {
         }
 
         return boardSize;
+    }
+
+    private Pawn choosePawnForMove(Pawn[][] gameBoard, boolean whitesTurn){
+        int rowIndex = getRowIndex(gameBoard);
+        int columnIndex = getColumnIndex(gameBoard);
+
+
+
+        return gameBoard[rowIndex][columnIndex];
+    }
+
+
+    private int getRowIndex(Pawn[][] gameBoard){
+        System.out.print("Provide row character: ");
+        String rowChar = sc.next().toUpperCase();
+        int rowIndex = new String(alphabet).indexOf(rowChar);
+        while (rowIndex == -1 || rowIndex >= gameBoard.length){
+            System.out.print("Invalid row character, try again: ");
+            rowChar = sc.next().toUpperCase();
+            rowIndex = new String(alphabet).indexOf(rowChar);
+            System.out.println(rowIndex);
+        }
+        return rowIndex;
+    }
+
+    private int getColumnIndex(Pawn[][] gameBoard){
+        int columnIdentifier = 0;
+        System.out.print("Provide column number: ");
+        while (columnIdentifier == 0 || columnIdentifier > gameBoard.length){
+            String columnIndexStr = sc.next();
+            try{
+                columnIdentifier = Integer.parseInt(columnIndexStr);
+            }
+            catch (NumberFormatException e){
+                System.out.print("Column index needs to be a number, try again: ");
+            }
+            System.out.print(
+                    columnIdentifier == 0 || columnIdentifier > gameBoard.length ? "Index can't be 0 and can't be bigger than " + gameBoard.length : ""
+            );
+        }
+        return columnIdentifier - 1;
     }
 
 
