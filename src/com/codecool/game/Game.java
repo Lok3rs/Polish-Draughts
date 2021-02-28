@@ -88,9 +88,11 @@ public class Game {
     private Pawn choosePawnForMove(Pawn[][] gameBoard, boolean whitesTurn){
         int rowIndex = getRowIndex(gameBoard);
         int columnIndex = getColumnIndex(gameBoard);
-
-        System.out.println(validatePawnSelection(gameBoard, rowIndex, columnIndex, whitesTurn));
-
+        while (!validatePawnSelection(gameBoard, rowIndex, columnIndex, whitesTurn)){
+            System.out.println("You can't choose that field, try again.");
+            rowIndex = getRowIndex(gameBoard);
+            columnIndex = getColumnIndex(gameBoard);
+        }
         return gameBoard[rowIndex][columnIndex];
     }
 
