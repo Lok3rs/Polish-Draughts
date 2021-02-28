@@ -156,7 +156,7 @@ public class Game {
         return coordsChange;
     }
 
-     private void makeMove(Pawn[][] gameBoard, Pawn selectedPawn, int[] coordsChange){
+    private void makeMove(Pawn[][] gameBoard, Pawn selectedPawn, int[] coordsChange){
         int currentX = selectedPawn.getPositionX();
         int currentY = selectedPawn.getPositionY();
         int coordsChangeX = coordsChange[1];
@@ -166,5 +166,5 @@ public class Game {
         selectedPawn.setPositionY(currentY + coordsChangeY);
         gameBoard[currentY][currentX] = null;
         gameBoard[currentY + coordsChangeY][currentX + coordsChangeX] = selectedPawn;
-     }
+    }
 }
