@@ -58,13 +58,11 @@ public class Game {
         printBoard(gameBoard);
         Pawn selectedPawn = choosePawnForMove(gameBoard, true);
         String moveDirection = getMoveDirection();
-        int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, false);
-//        System.out.println(selectedPawn.validateMove(gameBoard,
-//                selectedPawn.getPositionX() + moveTargetCoordinates[x],
-//                selectedPawn.getPositionY() + moveTargetCoordinates[y],
-//                moveDirection));
-        makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
-        printBoard(gameBoard);
+        int[] moveTargetCoordinates = getMoveCoordinates(moveDirection);
+        System.out.println(selectedPawn.validateMove(gameBoard,
+                selectedPawn.getPositionX() + moveTargetCoordinates[x],
+                selectedPawn.getPositionY() + moveTargetCoordinates[y],
+                moveDirection));
     }
 
     private int askForBoardSize(){
@@ -135,38 +133,30 @@ public class Game {
 
 
     private String getMoveDirection(){
-        System.out.println("Choose move direction:\n1 - Diagonally to the left\n2 - Diagonally to the right");
+        System.out.println("Choose move direction:\n1 - NE\n2 - NW\n3 - SE\n4 - SW");
         String moveDirection = "";
         while (moveDirection.equals("")){
             String userChoose = sc.next();
             switch (userChoose){
-                case "1" ->  moveDirection = "left";
-                case "2" ->  moveDirection = "right";
+                case "1" ->  moveDirection = "NE";
+                case "2" ->  moveDirection = "NW";
+                case "3" ->  moveDirection = "SE";
+                case "4" ->  moveDirection = "SW";
                 default -> System.out.print("Invalid choice, try again: ");
             }
         }
         return moveDirection;
     }
 
-    private int[] getMoveCoordinates(String direction, boolean isWhite){
+    private int[] getMoveCoordinates(String direction){
         int[] coordsChange = new int[0];
         switch (direction){
-            case "left" ->  coordsChange = isWhite ? new int[]{-1, -1} : new int[] {1, -1};
-            case "right" ->  coordsChange = isWhite ? new int[]{-1, 1} : new int[] {1, 1};
+            case "NE" ->  coordsChange = new int[]{1, 1};
+            case "NW" ->  coordsChange = new int[]{1, -1};
+            case "SE" ->  coordsChange = new int[]{-1, 1};
+            case "SW" ->  coordsChange = new int[]{-1, -1};
         }
 
         return coordsChange;
     }
-
-     private void makeMove(Pawn[][] gameBoard, Pawn selectedPawn, int[] coordsChange){
-        int currentX = selectedPawn.getPositionX();
-        int currentY = selectedPawn.getPositionY();
-        int coordsChangeX = coordsChange[1];
-        int coordsChangeY = coordsChange[0];
-
-        selectedPawn.setPositionX(currentX + coordsChangeX);
-        selectedPawn.setPositionY(currentY + coordsChangeY);
-        gameBoard[currentY][currentX] = null;
-        gameBoard[currentY + coordsChangeY][currentX + coordsChangeX] = selectedPawn;
-     }
 }
