@@ -167,8 +167,8 @@ public class Game {
     }
 
      private void makeMove(Pawn[][] gameBoard, Pawn selectedPawn, int[] coordsChange){
-        int currentX = selectedPawn.getPositionY();
-        int currentY = selectedPawn.getPositionX();
+        int currentX = selectedPawn.getPositionX();
+        int currentY = selectedPawn.getPositionY();
         int coordsChangeX = coordsChange[1];
         int coordsChangeY = coordsChange[0];
 

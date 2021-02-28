@@ -16,19 +16,19 @@ public class Board {
         int lastIndex = gameBoard.length - 1;
         int beforeLastIndex = gameBoard.length - 2;
 
-        for (int rowIndex = 0; rowIndex < gameBoard.length; rowIndex++) {
-            for (int columnIndex = 0; columnIndex < gameBoard.length; columnIndex++){
-                if (rowIndex == 0) {
-                    gameBoard[rowIndex][columnIndex] = columnIndex % 2 == 0 ? new Pawn(rowIndex, columnIndex, false) : null;
+        for (int i = 0; i < gameBoard.length; i++) {
+            for (int j = 0; j < gameBoard.length; j++){
+                if (i == 0) {
+                    gameBoard[i][j] = j % 2 == 0 ? new Pawn(j, i, false) : null;
                 }
-                else if (rowIndex == 1) {
-                    gameBoard[rowIndex][columnIndex] = columnIndex % 2 == 1 ? new Pawn(rowIndex, columnIndex, false) : null;
+                else if (i == 1) {
+                    gameBoard[i][j] = j % 2 == 1 ? new Pawn(j, i, false) : null;
                 }
-                else if (rowIndex == lastIndex) {
-                    gameBoard[rowIndex][columnIndex] = columnIndex % 2 == 0 ? new Pawn(rowIndex, columnIndex, true) : null;
+                else if (i == lastIndex) {
+                    gameBoard[i][j] = j % 2 == 0 ? new Pawn(j, i, true) : null;
                 }
-                else if (rowIndex == beforeLastIndex ) {
-                    gameBoard[rowIndex][columnIndex] = columnIndex % 2 == 1 ? new Pawn(rowIndex, columnIndex, true) : null;
+                else if (i == beforeLastIndex ) {
+                    gameBoard[i][j] = j % 2 == 1 ? new Pawn(j, i, true) : null;
                 }
             }
         }
