@@ -18,10 +18,18 @@ public class Board {
 
         for (int i = 0; i < gameBoard.length; i++) {
             for (int j = 0; j < gameBoard.length; j++){
-                if (i == 0) { gameBoard[i][j] = j % 2 == 0 ? new Pawn(j, i, false) : null; }
-                else if (i == 1) { gameBoard[i][j] = j % 2 == 1 ? new Pawn(j, i, false) : null; }
-                else if (i == lastIndex) { gameBoard[i][j] = j % 2 == 0 ? new Pawn(j, i, true) : null; }
-                else if (i == beforeLastIndex ) { gameBoard[i][j] = j % 2 == 1 ? new Pawn(j, i, true) : null; }
+                if (i == 0) {
+                    gameBoard[i][j] = j % 2 == 0 ? new Pawn(j, i, false) : null;
+                }
+                else if (i == 1) {
+                    gameBoard[i][j] = j % 2 == 1 ? new Pawn(j, i, false) : null;
+                }
+                else if (i == lastIndex) {
+                    gameBoard[i][j] = j % 2 == 0 ? new Pawn(j, i, true) : null;
+                }
+                else if (i == beforeLastIndex ) {
+                    gameBoard[i][j] = j % 2 == 1 ? new Pawn(j, i, true) : null;
+                }
             }
         }
         return gameBoard;

@@ -51,20 +51,29 @@ public class Game {
     }
 
     public void startGame(){
-        int x = 1;
-        int y = 0;
+//        int x = 1;
+//        int y = 0;
         int size = askForBoardSize();
         Pawn[][] gameBoard = Board.initBoard(size);
-        printBoard(gameBoard);
-        Pawn selectedPawn = choosePawnForMove(gameBoard, true);
-        String moveDirection = getMoveDirection();
-        int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, false);
+        boolean whitesTurn = true;
+        while (true){
+            round(gameBoard, whitesTurn);
+            whitesTurn = !whitesTurn;
+        }
 //        System.out.println(selectedPawn.validateMove(gameBoard,
 //                selectedPawn.getPositionX() + moveTargetCoordinates[x],
 //                selectedPawn.getPositionY() + moveTargetCoordinates[y],
 //                moveDirection));
-        makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+
+    }
+
+    private void round(Pawn[][] gameBoard, boolean isWhitesTurn){
         printBoard(gameBoard);
+        System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
+        Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
+        String moveDirection = getMoveDirection();
+        int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
+        makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
     }
 
     private int askForBoardSize(){
@@ -105,7 +114,6 @@ public class Game {
             System.out.print("Invalid row character, try again: ");
             rowChar = sc.next().toUpperCase();
             rowIndex = new String(alphabet).indexOf(rowChar);
-            System.out.println(rowIndex);
         }
         return rowIndex;
     }
