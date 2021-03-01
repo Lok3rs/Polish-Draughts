@@ -31,7 +31,7 @@ public class Pawn {
         return gameBoard[targetY][targetX].getIsWhite() != playerIsWhite;
     }
 
-    private boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
+    public boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
 
         int[] afterShootCoordsChange;
         byte y = 0;
@@ -43,8 +43,9 @@ public class Pawn {
             default -> throw new IllegalStateException("Unexpected value: " + direction);
         }
 
-        boolean enemyOnTargetField = isFieldOccupiedByEnemy(gameBoard, targetX, targetY, isWhite);
-        boolean emptyFieldAfterShoot = !isFieldOccupied(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
+        boolean enemyOnTargetField = isFieldOccupied(gameBoard, targetX, targetY) && isFieldOccupiedByEnemy(gameBoard, targetX, targetY, isWhite);
+        boolean emptyFieldAfterShoot = isMoveInBounds(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y])
+                && !isFieldOccupied(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
         boolean fieldAfterShootInBounds = isMoveInBounds(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
 
         return enemyOnTargetField && emptyFieldAfterShoot && fieldAfterShootInBounds;
