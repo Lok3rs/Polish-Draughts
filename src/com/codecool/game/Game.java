@@ -68,11 +68,24 @@ public class Game {
     }
 
     private void round(Pawn[][] gameBoard, boolean isWhitesTurn){
+        int rowIndex = 1;
+        int columnIndex = 0;
         printBoard(gameBoard);
         System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
         Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
         String moveDirection = getMoveDirection();
         int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
+        while (!selectedPawn.validateMove(
+                gameBoard,
+                selectedPawn.getPositionX() + moveTargetCoordinates[rowIndex],
+                selectedPawn.getPositionY() + moveTargetCoordinates[columnIndex],
+                moveDirection,
+                isWhitesTurn)){
+            System.out.println("You can't make that move, try again.");
+            selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
+            moveDirection = getMoveDirection();
+            moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
+        }
         makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
     }
 

@@ -12,39 +12,38 @@ public class Pawn {
         this.isWhite = isWhite;
     }
 
-    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction){
-        return isFieldOccupied(gameBoard, targetX, targetY) ?
-                isFieldOccupiedByEnemy(gameBoard, targetX, targetY) && isShootPossible(gameBoard, targetX, targetY, direction) :
-                isMoveInBounds(gameBoard, targetX, targetY);
+    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
+        return isMoveInBounds(gameBoard, targetX, targetY)
+                && (isFieldOccupied(gameBoard, targetX, targetY) ?
+                isFieldOccupiedByEnemy(gameBoard, targetX, targetY, isWhite) && isShootPossible(gameBoard, targetX, targetY, direction, isWhite) :
+                isMoveInBounds(gameBoard, targetX, targetY));
     }
 
     private boolean isMoveInBounds(Pawn[][] gameBoard, int targetX, int targetY){
-        return gameBoard.length > targetY && gameBoard[targetY].length > targetX;
+        return gameBoard.length > targetY && gameBoard[0].length > targetX && targetY >= 0 && targetX >= 0;
     }
 
     private boolean isFieldOccupied(Pawn[][] gameBoard, int targetX, int targetY){
         return gameBoard[targetY][targetX] != null;
     }
 
-    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY){
-        return gameBoard[targetY][targetX].getIsWhite();
+    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY, boolean playerIsWhite){
+        return gameBoard[targetY][targetX].getIsWhite() != playerIsWhite;
     }
 
-    private boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction){
+    private boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
 
         int[] afterShootCoordsChange;
         byte y = 0;
         byte x = 1;
 
         switch (direction) {
-            case "NE" -> afterShootCoordsChange = new int[]{1, 1};
-            case "NW" -> afterShootCoordsChange = new int[]{1, -1};
-            case "SE" -> afterShootCoordsChange = new int[]{-1, 1};
-            case "SW" -> afterShootCoordsChange = new int[]{-1, -1};
+            case "left" -> afterShootCoordsChange = isWhite ? new int[]{-1, -1} : new int[]{1, -1};
+            case "right" -> afterShootCoordsChange = isWhite ? new int[]{-1, 1} : new int[]{1, 1};
             default -> throw new IllegalStateException("Unexpected value: " + direction);
         }
 
-        boolean enemyOnTargetField = isFieldOccupiedByEnemy(gameBoard, targetX, targetY);
+        boolean enemyOnTargetField = isFieldOccupiedByEnemy(gameBoard, targetX, targetY, isWhite);
         boolean emptyFieldAfterShoot = !isFieldOccupied(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
         boolean fieldAfterShootInBounds = isMoveInBounds(gameBoard, targetX + afterShootCoordsChange[x], targetY + afterShootCoordsChange[y]);
 
