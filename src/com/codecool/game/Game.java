@@ -74,6 +74,7 @@ public class Game {
         String moveDirection = getMoveDirection();
         int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
         makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+        clearScreen();
     }
 
     private int askForBoardSize(){
@@ -176,5 +177,10 @@ public class Game {
         selectedPawn.setPositionY(currentY + coordsChangeY);
         gameBoard[currentY][currentX] = null;
         gameBoard[currentY + coordsChangeY][currentX + coordsChangeX] = selectedPawn;
+    }
+
+    public static void clearScreen() {
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
     }
 }
