@@ -6,30 +6,49 @@ public class Pawn {
     int positionY;
     boolean isWhite;
 
-    public Pawn(int positionX, int positionY, boolean isWhite){
+    public Pawn(int positionX, int positionY, boolean isWhite) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.isWhite = isWhite;
     }
 
-    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
+    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite) {
         return isMoveInBounds(gameBoard, targetX, targetY)
                 && (isFieldOccupied(gameBoard, targetX, targetY) ?
                 isFieldOccupiedByEnemy(gameBoard, targetX, targetY, isWhite) && isShootPossible(gameBoard, targetX, targetY, direction, isWhite) :
                 isMoveInBounds(gameBoard, targetX, targetY));
     }
 
-    private boolean isMoveInBounds(Pawn[][] gameBoard, int targetX, int targetY){
+    private boolean isMoveInBounds(Pawn[][] gameBoard, int targetX, int targetY) {
         return gameBoard.length > targetY && gameBoard[0].length > targetX && targetY >= 0 && targetX >= 0;
     }
 
-    private boolean isFieldOccupied(Pawn[][] gameBoard, int targetX, int targetY){
+    private boolean isFieldOccupied(Pawn[][] gameBoard, int targetX, int targetY) {
         return gameBoard[targetY][targetX] != null;
     }
 
-    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY, boolean playerIsWhite){
+    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY, boolean playerIsWhite) {
         return gameBoard[targetY][targetX].getIsWhite() != playerIsWhite;
     }
+
+    public boolean isNextToEnemy(Pawn[][] gameBoard, int startX, int startY, boolean playerIsWhite) {
+
+
+        for (int a = (startX-1); a <= (startX + 1); a++) {
+            for (int b = (startY - 1); b <= (startY + 1); b++) {
+                if (gameBoard[a][b] != null) {
+                    if (gameBoard[a][b].getIsWhite() != playerIsWhite) {
+                        System.out.println("next to enemy!!!!");
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+
 
     public boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
 

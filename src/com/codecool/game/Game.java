@@ -69,7 +69,7 @@ public class Game {
         printBoard(gameBoard);
         System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
         Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
-        String moveDirection = getMoveDirection();
+        String moveDirection = getMoveDirection(gameBoard, selectedPawn, isWhitesTurn);
         int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
         while (!selectedPawn.validateMove(
                 gameBoard,
@@ -79,7 +79,7 @@ public class Game {
                 isWhitesTurn)) {
             System.out.println("You can't make that move, try again.");
             selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
-            moveDirection = getMoveDirection();
+            moveDirection = getMoveDirection(gameBoard, selectedPawn, isWhitesTurn);
             moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
         }
         if (selectedPawn.isShootPossible(
@@ -166,17 +166,35 @@ public class Game {
     }
 
 
-    private String getMoveDirection() {
-        System.out.println("Choose move direction:\n1 - Diagonally to the left\n2 - Diagonally to the right");
+    private String getMoveDirection(Pawn[][] gameBoard, Pawn selectedPawn, boolean isWhitesTurn) {
+
         String moveDirection = "";
-        while (moveDirection.equals("")) {
-            String userChoose = sc.next();
-            switch (userChoose) {
-                case "1" -> moveDirection = "left";
-                case "2" -> moveDirection = "right";
-                case "3" -> moveDirection = "back-left";
-                case "4" -> moveDirection = "back-right";
-                default -> System.out.print("Invalid choice, try again: ");
+
+
+        if (selectedPawn.isNextToEnemy(
+                gameBoard,
+                selectedPawn.getPositionX(),
+                selectedPawn.getPositionY(), isWhitesTurn)){
+            System.out.println("Choose move direction:\n1 - shoot to the left\n2 - shoot to the right\n3 - shoot back left\n4 - shoot back right");
+            while (moveDirection.equals("")) {
+                String userChoose = sc.next();
+                switch (userChoose) {
+                    case "1" -> moveDirection = "left";
+                    case "2" -> moveDirection = "right";
+                    case "3" -> moveDirection = "back-left";
+                    case "4" -> moveDirection = "back-right";
+                    default -> System.out.print("Invalid choice, try again: ");
+                }
+            }
+        }else {
+            System.out.println("Choose move direction:\n1 - move to the left\n2 - move to the right");
+            while (moveDirection.equals("")) {
+                String userChoose = sc.next();
+                switch (userChoose) {
+                    case "1" -> moveDirection = "left";
+                    case "2" -> moveDirection = "right";
+                    default -> System.out.print("Invalid choice, try again: ");
+                }
             }
         }
         return moveDirection;
