@@ -39,7 +39,9 @@ public class Pawn {
 
         switch (direction) {
             case "left" -> afterShootCoordsChange = isWhite ? new int[]{-1, -1} : new int[]{1, -1};
+            case "back-left" -> afterShootCoordsChange = isWhite ? new int[]{1, -1} : new int[]{-1, -1};
             case "right" -> afterShootCoordsChange = isWhite ? new int[]{-1, 1} : new int[]{1, 1};
+            case "back-right" -> afterShootCoordsChange = isWhite ? new int[]{1, 1} : new int[]{-1, 1};
             default -> throw new IllegalStateException("Unexpected value: " + direction);
         }
 

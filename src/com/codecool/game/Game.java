@@ -37,12 +37,13 @@ public class Game {
                 if (elementIndex == gameBoard[rowIndex].length - 1) {
                     System.out.print(
                             gameBoard[rowIndex][elementIndex] == null ? "   " :
-                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " W " : " B "
+                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " "+"\u2B1C"+" " : " "+"\u2B1B"+" "
+
                     );
                 } else {
                     System.out.print(
                             gameBoard[rowIndex][elementIndex] == null ? "   |" :
-                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " W |" : " B |"
+                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " "+"\u2B1C"+" |" : " "+"\u2B1B"+" |"
                     );
                 }
             }
@@ -87,8 +88,15 @@ public class Game {
                 selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex],
                 moveDirection, isWhitesTurn)){
             gameBoard[selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex]][selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex]] = null;
-            moveTargetCoordinates[rowIndex] += isWhitesTurn ? -1 : 1;
-            moveTargetCoordinates[columnIndex] += moveDirection.equals("left") ? -1 : 1;
+
+            if (isWhitesTurn){
+                moveTargetCoordinates[rowIndex] += moveDirection.equals("back-left") || moveDirection.equals("back-right") ? 1 : -1;
+                moveTargetCoordinates[columnIndex] += moveDirection.equals("left") || moveDirection.equals("back-left") ? -1 : 1;
+            }
+            else {
+                moveTargetCoordinates[rowIndex] += moveDirection.equals("back-left") || moveDirection.equals("back-right") ? -1 : 1;
+                moveTargetCoordinates[columnIndex] += moveDirection.equals("left") || moveDirection.equals("back-left")  ? -1 : 1;
+            }
         }
         makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
     }
@@ -166,6 +174,8 @@ public class Game {
             switch (userChoose) {
                 case "1" -> moveDirection = "left";
                 case "2" -> moveDirection = "right";
+                case "3" -> moveDirection = "back-left";
+                case "4" -> moveDirection = "back-right";
                 default -> System.out.print("Invalid choice, try again: ");
             }
         }
@@ -176,7 +186,10 @@ public class Game {
         int[] coordsChange = new int[0];
         switch (direction) {
             case "left" -> coordsChange = isWhite ? new int[]{-1, -1} : new int[]{1, -1};
+            case "back-left" -> coordsChange = isWhite ? new int[]{1, -1} : new int[]{-1, -1};
             case "right" -> coordsChange = isWhite ? new int[]{-1, 1} : new int[]{1, 1};
+            case "back-right" -> coordsChange = isWhite ? new int[]{1, 1} : new int[]{-1, 1};
+
         }
 
         return coordsChange;
