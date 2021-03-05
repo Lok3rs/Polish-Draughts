@@ -4,10 +4,7 @@ import com.codecool.pawn.Pawn;
 import com.codecool.printer.Printer;
 import com.codecool.validator.Validator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class InputService {
     final Scanner sc = new Scanner(System.in);
@@ -38,8 +35,6 @@ public class InputService {
             switch (userChoose) {
                 case "1" -> moveDirection = "left";
                 case "2" -> moveDirection = "right";
-                case "3" -> moveDirection = "back-left";
-                case "4" -> moveDirection = "back-right";
                 default -> System.out.print("Invalid choice, try again: ");
             }
         }
@@ -83,36 +78,47 @@ public class InputService {
         for (int i = 0; i < shootingOptions.size(); i++){
             optionsForDisplay.add(Arrays.asList(String.valueOf(i + 1), shootingOptions.get(i)));
             System.out.println("Shoot required, choose direction.");
-            System.out.printf("%s - Diagonally to the %s", optionsForDisplay.get(i).get(0), optionsForDisplay.get(i).get(1));
+            System.out.printf("%s - Diagonally to the %s\n", optionsForDisplay.get(i).get(0), optionsForDisplay.get(i).get(1));
         }
-        int[] leftShootCoords = pawnIsWhite ? new int[]{-1, -1} : new int[]{1, -1};
-        int[] rightShootCoords = pawnIsWhite ? new int[]{-1, 1} : new int[]{1, 1};
-        int[] backLeftShootCoords = pawnIsWhite ? new int[]{1, -1} : new int[]{-1, -1};
-        int[] backRightShootCoords = pawnIsWhite ? new int[]{1, 1} : new int[]{-1, 1};
+        int[] leftShootCoords = pawnIsWhite ? new int[]{-2, -2} : new int[]{2, -2};
+        int[] rightShootCoords = pawnIsWhite ? new int[]{-2, 2} : new int[]{2, 2};
+        int[] backLeftShootCoords = pawnIsWhite ? new int[]{2, -2} : new int[]{-2, -2};
+        int[] backRightShootCoords = pawnIsWhite ? new int[]{2, 2} : new int[]{-2, 2};
 
-        boolean keepAsking = true;
-        String direction = null;
+        String direction;
 
         String userInput = sc.next();
 
-        while (keepAsking){
-            for (List<String> option : optionsForDisplay){
-                direction = option.get(1);
-                keepAsking = userInput.equals(option.get(0));
-            }
-            System.out.println("Invalid choice, try again: ");
+
+        while (Integer.parseInt(userInput) > optionsForDisplay.size() || Integer.parseInt(userInput) <= 0){
+            System.out.println("Invalid choose, try again");
             userInput = sc.next();
         }
 
+        direction = optionsForDisplay.get(Integer.parseInt(userInput) - 1).get(1);
+
         int[] coords = new int[0];
 
-        switch (direction){
-            case "left" -> coords = leftShootCoords;
-            case "right" -> coords = rightShootCoords;
-            case "back-left" -> coords = backLeftShootCoords;
-            case "back-right" -> coords = backRightShootCoords;
-        }
 
+        switch (direction) {
+            case "left" -> {
+                coords = leftShootCoords;
+                gameBoard[selectedPawn.getPositionY() + (pawnIsWhite ? -1 : 1)][selectedPawn.getPositionX() - 1] = null;
+            }
+            case "right" -> {
+                coords = rightShootCoords;
+                gameBoard[selectedPawn.getPositionY() + (pawnIsWhite ? -1 : 1)][selectedPawn.getPositionX() + 1] = null;
+            }
+            case "back-left" -> {
+                coords = backLeftShootCoords;
+                gameBoard[selectedPawn.getPositionY() + (pawnIsWhite ? 1 : -1)][selectedPawn.getPositionX() - 1] = null;
+            }
+            case "back-right" -> {
+                coords = backRightShootCoords;
+                gameBoard[selectedPawn.getPositionY() + (pawnIsWhite ? 1 : -1)][selectedPawn.getPositionX() + 1] = null;
+            }
+
+        }
         return coords;
     }
 

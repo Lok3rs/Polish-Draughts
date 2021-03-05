@@ -87,7 +87,6 @@ public class Validator {
                 shootOptions.add(option);
             }
         }
-
         return shootOptions;
     }
 
@@ -96,25 +95,29 @@ public class Validator {
         return selectedPawnX != gameBoard.length - 1 &&
                 selectedPawnY != gameBoard.length - 1 &&
                 gameBoard[selectedPawnY + 1][selectedPawnX + 1] != null &&
-                gameBoard[selectedPawnY + 1][selectedPawnX + 1].getIsWhite() != pawnIsWhite;
+                gameBoard[selectedPawnY + 1][selectedPawnX + 1].getIsWhite() != pawnIsWhite &&
+                isShootPossible(gameBoard, selectedPawnX + 1, selectedPawnY + 1, (pawnIsWhite ? "back-right" : "right"), pawnIsWhite);
     }
     private boolean checkForEnemyBottomLeft(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
         return selectedPawnY != gameBoard.length - 1 &&
                 selectedPawnX != 0 &&
                 gameBoard[selectedPawnY + 1][selectedPawnX - 1] != null &&
-                gameBoard[selectedPawnY + 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite;
+                gameBoard[selectedPawnY + 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite &&
+                isShootPossible(gameBoard, selectedPawnX - 1, selectedPawnY + 1, (pawnIsWhite ? "back-left" : "left"), pawnIsWhite);
     }
     private boolean checkForEnemyTopRight(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
         return selectedPawnY != 0 &&
                 selectedPawnX != gameBoard.length -1 &&
                 gameBoard[selectedPawnY - 1][selectedPawnX + 1] != null &&
-                gameBoard[selectedPawnY - 1][selectedPawnX + 1].getIsWhite() != pawnIsWhite;
+                gameBoard[selectedPawnY - 1][selectedPawnX + 1].getIsWhite() != pawnIsWhite &&
+                isShootPossible(gameBoard, selectedPawnX + 1, selectedPawnY - 1, (pawnIsWhite ? "right" : "back-right"), pawnIsWhite);
     }
     private boolean checkForEnemyTopLeft(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
         return selectedPawnY != 0 &&
                 selectedPawnX != 0 &&
                 gameBoard[selectedPawnY - 1][selectedPawnX - 1] != null &&
-                gameBoard[selectedPawnY - 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite;
+                gameBoard[selectedPawnY - 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite &&
+                isShootPossible(gameBoard, selectedPawnX - 1, selectedPawnY - 1, (pawnIsWhite ? "left" : "back-left"), pawnIsWhite);
     }
 
 }

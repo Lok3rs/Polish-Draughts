@@ -29,7 +29,15 @@ public class Game {
         System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
         Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
         if (validator.isShootRequired(gameBoard, selectedPawn)){
-            inputService.getShootOption(gameBoard, selectedPawn);
+            int[] moveTargetCoordinates = inputService.getShootOption(gameBoard, selectedPawn);
+            makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+            while(validator.isShootRequired(gameBoard, selectedPawn)){
+                Printer.clearScreen();
+                Printer.printBoard(gameBoard);
+                System.out.println("Another shoot possible!");
+                moveTargetCoordinates = inputService.getShootOption(gameBoard, selectedPawn);
+                makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+            }
         }
         else {
             String moveDirection = inputService.getMoveDirection();
