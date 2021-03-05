@@ -2,11 +2,16 @@ package com.codecool.inputService;
 
 import com.codecool.pawn.Pawn;
 import com.codecool.printer.Printer;
+import com.codecool.validator.Validator;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class InputService {
     final Scanner sc = new Scanner(System.in);
+    final Validator validator = new Validator();
 
     public int askForBoardSize() {
         System.out.print("Choose game board size (8 - 20): ");
@@ -69,4 +74,46 @@ public class InputService {
         }
         return columnIdentifier - 1;
     }
+
+    public int[] getShootOption(Pawn[][] gameBoard, Pawn selectedPawn){
+        boolean pawnIsWhite = selectedPawn.getIsWhite();
+        List<String> shootingOptions = validator.checkShootOptions(gameBoard, selectedPawn);
+        List<List<String>> optionsForDisplay = new ArrayList<>();
+
+        for (int i = 0; i < shootingOptions.size(); i++){
+            optionsForDisplay.add(Arrays.asList(String.valueOf(i + 1), shootingOptions.get(i)));
+            System.out.println("Shoot required, choose direction.");
+            System.out.printf("%s - Diagonally to the %s", optionsForDisplay.get(i).get(0), optionsForDisplay.get(i).get(1));
+        }
+        int[] leftShootCoords = pawnIsWhite ? new int[]{-1, -1} : new int[]{1, -1};
+        int[] rightShootCoords = pawnIsWhite ? new int[]{-1, 1} : new int[]{1, 1};
+        int[] backLeftShootCoords = pawnIsWhite ? new int[]{1, -1} : new int[]{-1, -1};
+        int[] backRightShootCoords = pawnIsWhite ? new int[]{1, 1} : new int[]{-1, 1};
+
+        boolean keepAsking = true;
+        String direction = null;
+
+        String userInput = sc.next();
+
+        while (keepAsking){
+            for (List<String> option : optionsForDisplay){
+                direction = option.get(1);
+                keepAsking = userInput.equals(option.get(0));
+            }
+            System.out.println("Invalid choice, try again: ");
+            userInput = sc.next();
+        }
+
+        int[] coords = new int[0];
+
+        switch (direction){
+            case "left" -> coords = leftShootCoords;
+            case "right" -> coords = rightShootCoords;
+            case "back-left" -> coords = backLeftShootCoords;
+            case "back-right" -> coords = backRightShootCoords;
+        }
+
+        return coords;
+    }
+
 }

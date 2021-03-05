@@ -28,35 +28,41 @@ public class Game {
         Printer.printBoard(gameBoard);
         System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
         Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
-        String moveDirection = inputService.getMoveDirection();
-        int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
-        while (!validator.validateMove(
-                gameBoard,
-                selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex],
-                selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex],
-                moveDirection,
-                isWhitesTurn)) {
-            System.out.println("You can't make that move, try again.");
-            selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
-            moveDirection = inputService.getMoveDirection();
-            moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
+        if (validator.isShootRequired(gameBoard, selectedPawn)){
+            inputService.getShootOption(gameBoard, selectedPawn);
         }
-        if (validator.isShootPossible(
-                gameBoard,
-                selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex],
-                selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex],
-                moveDirection, isWhitesTurn)){
-            gameBoard[selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex]][selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex]] = null;
+        else {
+            String moveDirection = inputService.getMoveDirection();
+            int[] moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
+            while (!validator.validateMove(
+                    gameBoard,
+                    selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex],
+                    selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex],
+                    moveDirection,
+                    isWhitesTurn)) {
+                System.out.println("You can't make that move, try again.");
+                selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
+                moveDirection = inputService.getMoveDirection();
+                moveTargetCoordinates = getMoveCoordinates(moveDirection, isWhitesTurn);
+            }
+            if (validator.isShootPossible(
+                    gameBoard,
+                    selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex],
+                    selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex],
+                    moveDirection, isWhitesTurn)){
+                gameBoard[selectedPawn.getPositionY() + moveTargetCoordinates[rowIndex]][selectedPawn.getPositionX() + moveTargetCoordinates[columnIndex]] = null;
 
-            if (isWhitesTurn){
-                moveTargetCoordinates[rowIndex] += moveDirection.equals("back-left") || moveDirection.equals("back-right") ? 1 : -1;
+                if (isWhitesTurn){
+                    moveTargetCoordinates[rowIndex] += moveDirection.equals("back-left") || moveDirection.equals("back-right") ? 1 : -1;
+                }
+                else {
+                    moveTargetCoordinates[rowIndex] += moveDirection.equals("back-left") || moveDirection.equals("back-right") ? -1 : 1;
+                }
+                moveTargetCoordinates[columnIndex] += moveDirection.equals("left") || moveDirection.equals("back-left") ? -1 : 1;
             }
-            else {
-                moveTargetCoordinates[rowIndex] += moveDirection.equals("back-left") || moveDirection.equals("back-right") ? -1 : 1;
-            }
-            moveTargetCoordinates[columnIndex] += moveDirection.equals("left") || moveDirection.equals("back-left") ? -1 : 1;
+            makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
         }
-        makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+
     }
 
     private Pawn choosePawnForMove(Pawn[][] gameBoard, boolean whitesTurn) {
