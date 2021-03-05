@@ -124,5 +124,4 @@ public class Validator {
                 && gameBoard[selectedPawnY - 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite;
     }
 
-
 }

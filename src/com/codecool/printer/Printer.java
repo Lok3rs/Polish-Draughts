@@ -30,12 +30,12 @@ public class Printer {
                 if (elementIndex == gameBoard[rowIndex].length - 1) {
                     System.out.print(
                             gameBoard[rowIndex][elementIndex] == null ? "   " :
-                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " "+"\u2B1C"+" " : " "+"\u2B1B"+" "
+                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " "+"\u25FB"+" " : " "+"\u25FC"+" "
                     );
                 } else {
                     System.out.print(
                             gameBoard[rowIndex][elementIndex] == null ? "   |" :
-                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " "+"\u2B1C"+" |" : " "+"\u2B1B"+" |"
+                                    gameBoard[rowIndex][elementIndex].getIsWhite() ? " "+"\u25FB"+" |" : " "+"\u25FC"+" |"
                     );
                 }
             }
