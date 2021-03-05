@@ -8,26 +8,26 @@ public class Validator {
         return selectedField != null && selectedField.getIsWhite() == playerIsWhite;
     }
 
-    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
+    public boolean validateMove(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite) {
         return isMoveInBounds(gameBoard, targetX, targetY)
                 && (isFieldOccupied(gameBoard, targetX, targetY) ?
                 isFieldOccupiedByEnemy(gameBoard, targetX, targetY, isWhite) && isShootPossible(gameBoard, targetX, targetY, direction, isWhite) :
                 isMoveInBounds(gameBoard, targetX, targetY));
     }
 
-    private boolean isMoveInBounds(Pawn[][] gameBoard, int targetX, int targetY){
+    private boolean isMoveInBounds(Pawn[][] gameBoard, int targetX, int targetY) {
         return gameBoard.length > targetY && gameBoard[0].length > targetX && targetY >= 0 && targetX >= 0;
     }
 
-    private boolean isFieldOccupied(Pawn[][] gameBoard, int targetX, int targetY){
+    private boolean isFieldOccupied(Pawn[][] gameBoard, int targetX, int targetY) {
         return gameBoard[targetY][targetX] != null;
     }
 
-    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY, boolean playerIsWhite){
+    private boolean isFieldOccupiedByEnemy(Pawn[][] gameBoard, int targetX, int targetY, boolean playerIsWhite) {
         return gameBoard[targetY][targetX].getIsWhite() != playerIsWhite;
     }
 
-    public boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite){
+    public boolean isShootPossible(Pawn[][] gameBoard, int targetX, int targetY, String direction, boolean isWhite) {
 
         int[] afterShootCoordsChange;
         byte y = 0;
@@ -49,7 +49,7 @@ public class Validator {
         return enemyOnTargetField && emptyFieldAfterShoot && fieldAfterShootInBounds;
     }
 
-    public boolean checkIfShootRequired(Pawn[][] gameBoard, Pawn selectedPawn){
+    public boolean checkIfShootRequired(Pawn[][] gameBoard, Pawn selectedPawn) {
 
         int selectedPawnY = selectedPawn.getPositionY();
         int selectedPawnX = selectedPawn.getPositionX();
@@ -64,7 +64,7 @@ public class Validator {
             return checkForEnemyBottomLeft(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite);
         }
         // right bottom corner
-        else if (selectedPawnY == gameBoard.length - 1 && selectedPawnX == gameBoard.length - 1){
+        else if (selectedPawnY == gameBoard.length - 1 && selectedPawnX == gameBoard.length - 1) {
             return checkForEnemyTopLeft(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite);
         }
         // left bottom corner
@@ -78,19 +78,19 @@ public class Validator {
                     checkForEnemyBottomLeft(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite);
         }
         // just bottom line
-        else if (selectedPawnY == gameBoard.length - 1){
+        else if (selectedPawnY == gameBoard.length - 1) {
             return checkForEnemyTopRight(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite)
                     ||
                     checkForEnemyTopLeft(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite);
         }
         // left side
-        else if (selectedPawnX == 0){
+        else if (selectedPawnX == 0) {
             return checkForEnemyTopRight(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite)
                     ||
                     checkForEnemyBottomRight(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite);
         }
         // right side
-        else if (selectedPawnX == gameBoard.length - 1){
+        else if (selectedPawnX == gameBoard.length - 1) {
             return checkForEnemyTopLeft(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite)
                     ||
                     checkForEnemyBottomLeft(gameBoard, selectedPawnY, selectedPawnX, pawnIsWhite);
@@ -107,21 +107,48 @@ public class Validator {
         }
     }
 
-    private boolean checkForEnemyBottomRight(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
+    private boolean checkForEnemyBottomRight(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite) {
         return gameBoard[selectedPawnY + 1][selectedPawnX + 1] != null
                 && gameBoard[selectedPawnY + 1][selectedPawnX + 1].getIsWhite() != pawnIsWhite;
     }
-    private boolean checkForEnemyBottomLeft(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
+
+    private boolean checkForEnemyBottomLeft(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite) {
         return gameBoard[selectedPawnY + 1][selectedPawnX - 1] != null
                 && gameBoard[selectedPawnY + 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite;
     }
-    private boolean checkForEnemyTopRight(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
+
+    private boolean checkForEnemyTopRight(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite) {
         return gameBoard[selectedPawnY - 1][selectedPawnX + 1] != null
                 && gameBoard[selectedPawnY - 1][selectedPawnX + 1].getIsWhite() != pawnIsWhite;
     }
-    private boolean checkForEnemyTopLeft(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite){
+
+    private boolean checkForEnemyTopLeft(Pawn[][] gameBoard, int selectedPawnY, int selectedPawnX, boolean pawnIsWhite) {
         return gameBoard[selectedPawnY - 1][selectedPawnX - 1] != null
                 && gameBoard[selectedPawnY - 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite;
+    }
+
+    public String checkIsWin(Pawn[][] gameBoard) {
+        int counterWhites = 0;
+        int counterBlacks = 0;
+
+        for (int x = 0; x < gameBoard.length; x++) {
+            for (int y = 0; y < gameBoard.length; y++) {
+                if (gameBoard[x][y] != null && gameBoard[x][y].getIsWhite()) {
+                    counterWhites++;
+                }
+                else if (gameBoard[x][y] != null && !gameBoard[x][y].getIsWhite()){
+                    counterBlacks++;
+                }
+            }
+        }
+        if (counterBlacks == 0) {
+            return "whites-win";
+        }
+        else if (counterWhites == 0){
+            return "blacks-win";
+        }
+        else
+            return "no-win";
     }
 
 }
