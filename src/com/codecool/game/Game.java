@@ -3,6 +3,7 @@ package com.codecool.game;
 import com.codecool.board.Board;
 import com.codecool.inputService.InputService;
 import com.codecool.pawn.Pawn;
+import com.codecool.player.Player;
 import com.codecool.printer.Printer;
 import com.codecool.validator.Validator;
 
@@ -10,6 +11,9 @@ public class Game {
 
     InputService inputService = new InputService();
     Validator validator = new Validator();
+    Player player1 = new Player(1, 0, "John");
+    Player player2 = new Player(2, 0, "Molly");
+
 
     public void startGame() {
         int size = inputService.askForBoardSize();
@@ -36,6 +40,8 @@ public class Game {
         int columnIndex = 1;
         int rowIndex = 0;
         Printer.clearScreen();
+        System.out.println("Whites points ---> " + player1.getPoints());
+        System.out.println("Blacks Points ---> " + player2.getPoints());
         Printer.printBoard(gameBoard);
         System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
         Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
@@ -68,6 +74,8 @@ public class Game {
             moveTargetCoordinates[columnIndex] += moveDirection.equals("left") || moveDirection.equals("back-left") ? -1 : 1;
         }
         makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+        player1.setPoints(gameBoard.length - validator.countBlacks(gameBoard));
+        player2.setPoints(gameBoard.length - validator.countWhites(gameBoard));
 
     }
 
