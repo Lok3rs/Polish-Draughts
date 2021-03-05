@@ -41,7 +41,7 @@ public class Game {
         int rowIndex = 0;
         Printer.clearScreen();
         System.out.println("Whites points ---> " + player1.getPoints());
-        System.out.println("Blacks Points ---> " + player2.getPoints());
+        System.out.println("Blacks points ---> " + player2.getPoints());
         Printer.printBoard(gameBoard);
         System.out.println(isWhitesTurn ? "Whites turn" : "Blacks turn");
         Pawn selectedPawn = choosePawnForMove(gameBoard, isWhitesTurn);
