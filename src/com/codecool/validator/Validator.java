@@ -1,8 +1,15 @@
 package com.codecool.validator;
 
+import com.codecool.board.Board;
+import com.codecool.game.Game;
+import com.codecool.inputService.InputService;
 import com.codecool.pawn.Pawn;
+import com.codecool.player.Player;
+
+import java.awt.image.PixelInterleavedSampleModel;
 
 public class Validator {
+
     public boolean validatePawnSelection(Pawn[][] gameBoard, int rowIndex, int columnIndex, boolean playerIsWhite) {
         Pawn selectedField = gameBoard[rowIndex][columnIndex];
         return selectedField != null && selectedField.getIsWhite() == playerIsWhite;
@@ -127,20 +134,37 @@ public class Validator {
                 && gameBoard[selectedPawnY - 1][selectedPawnX - 1].getIsWhite() != pawnIsWhite;
     }
 
-    public String checkIsWin(Pawn[][] gameBoard) {
+    public int countWhites(Pawn[][] gameBoard) {
         int counterWhites = 0;
-        int counterBlacks = 0;
-
+        int whitesScore = gameBoard.length;
         for (int x = 0; x < gameBoard.length; x++) {
             for (int y = 0; y < gameBoard.length; y++) {
                 if (gameBoard[x][y] != null && gameBoard[x][y].getIsWhite()) {
                     counterWhites++;
                 }
-                else if (gameBoard[x][y] != null && !gameBoard[x][y].getIsWhite()){
+            }
+        }
+        return counterWhites;
+    }
+
+    public int countBlacks(Pawn[][] gameBoard) {
+        int counterBlacks = 0;
+
+        for (int x = 0; x < gameBoard.length; x++) {
+            for (int y = 0; y < gameBoard.length; y++) {
+                if (gameBoard[x][y] != null && !gameBoard[x][y].getIsWhite()) {
                     counterBlacks++;
                 }
             }
         }
+        return counterBlacks;
+    }
+
+
+    public String checkIsWin(Pawn[][] gameBoard) {
+        int counterWhites = countWhites(gameBoard);
+        int counterBlacks = countBlacks(gameBoard);
+
         if (counterBlacks == 0) {
             return "whites-win";
         }
