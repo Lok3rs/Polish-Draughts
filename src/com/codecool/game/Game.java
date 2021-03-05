@@ -14,10 +14,21 @@ public class Game {
     public void startGame() {
         int size = inputService.askForBoardSize();
         Pawn[][] gameBoard = Board.initBoard(size);
+
         boolean whitesTurn = true;
         while (true) {
             round(gameBoard, whitesTurn);
             whitesTurn = !whitesTurn;
+            if (validator.checkIsWin(gameBoard) == "whites-win"){
+                Printer.clearScreen();
+                System.out.println("Whites win!");
+                break;
+            }
+            else if (validator.checkIsWin(gameBoard) == "blacks-win"){
+                Printer.clearScreen();
+                System.out.println("Blacks win!");
+                break;
+            }
         }
     }
 
@@ -57,6 +68,7 @@ public class Game {
             moveTargetCoordinates[columnIndex] += moveDirection.equals("left") || moveDirection.equals("back-left") ? -1 : 1;
         }
         makeMove(gameBoard, selectedPawn, moveTargetCoordinates);
+
     }
 
     private Pawn choosePawnForMove(Pawn[][] gameBoard, boolean whitesTurn) {
