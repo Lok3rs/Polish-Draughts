@@ -5,12 +5,6 @@ import com.codecool.pawn.Pawn;
 
 public class Board {
 
-    public int size;
-
-    public Board(int size){
-        this.size = size;
-    }
-
     public static Pawn[][] initBoard(int size){
         Pawn[][] gameBoard = new Pawn[size][size];
         int lastIndex = gameBoard.length - 1;
